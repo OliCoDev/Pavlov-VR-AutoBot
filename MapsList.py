@@ -13,7 +13,7 @@ def addMap(newMap):
     global maps
     maps.append(newMap)
 
-def randomiseOrder():
+def shuffle():
     global maps
     for i in range(len(maps)):
         randomPos = random.randint(0, len(maps)-1)
