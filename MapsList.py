@@ -1,4 +1,3 @@
-import Map
 import random
 
 maps = []
