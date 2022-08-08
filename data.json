@@ -1,0 +1,6 @@
+{
+    "Bot_Token": "[Token Here]",
+    "Server_Ip": "[Pavlov VR Server IP Here]",
+    "Server_Port": "[Rcon Port Here]",
+    "Rcon_Password": "[Rcon Password Here]"
+}
