@@ -44,7 +44,7 @@ You can request a map using the aformentioned command and replacing the ```[Map 
 -```/addcollection [Collection Url Here]```
 You can request a collection of maps using the aformentioned command and replacing the ```[Collection Url Here]``` with the URL of a Pavlov VR Collection that you can find on it's [Steam Workshop Collections](https://steamcommunity.com/workshop/browse/?appid=555160&browsesort=trend&section=collections) page. After that, you may follow the instruction that the bot gives you
 
--```/shufflemaps``
+-```/shufflemaps```
 This command will shuffle the order of the maps that are present inside of the waiting list
 
 ## Current future plans
