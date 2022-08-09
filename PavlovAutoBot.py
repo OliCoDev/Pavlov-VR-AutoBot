@@ -2,7 +2,6 @@ import discord
 import Commands
 import RequestList
 
-token = "OTM1ODkyMDQyMDM3NDY1MTk4.Gj-avo.UvW0JG062cDOh0PsRs7Usum-Wjs-Z3ZyRBorlo"
 client = discord.Client()
 
 
