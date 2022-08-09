@@ -22,9 +22,9 @@ class Collection:
         self.requestedMaps = []
         for i in requestData:
             if i["result"] != 1:
-                pass
+                continue
             if i["creator_app_id"] != 555160:
-                pass
+                continue
             tags = []
             for j in i["tags"]:
                 tags.append(j["tag"])

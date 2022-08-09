@@ -26,12 +26,14 @@ async def sendCollectionConfirmation(collectionInfo: Collection, author, message
 async def sendMapRequest(mapInfo: Map, author, message):
     messageContent = "<@" + str(author) + ">\nPlease select what gamemode you would like to play on " + mapInfo.title
     for i in range(len(mapInfo.tags)):
-        messageContent += Converter.intToReaction(i) + ": " + mapInfo.tags[i] + "\n"
-    messageOutput = None
+        messageContent += "\n" + Converter.intToReaction(i) + ": " + mapInfo.tags[i]
+    newMessage = None
     img = ImageManager.getImage(mapInfo.image)
     if img:
-        await message.channel.send(messageContent, file=File(r".\\" + img))
+        newMessage = await message.channel.send(messageContent, file=File(r".\\" + img))
         ImageManager.deleteImage(img)
     else:
-        await message.channel.send(messageContent)
-    return messageOutput
+        newMessage = await message.channel.send(messageContent)
+    for i in range(len(mapInfo.tags)):
+        await newMessage.add_reaction(Converter.intToReaction(i))
+    return newMessage

@@ -1,13 +1,10 @@
-from Map import Map
-from Collection import Collection
 from pavlovEnums import RequestTypes
 import MessageManager
 import Converter
 
 
 class Request:
-
-    def __int__(self, authorId, reqType, info):
+    def __init__(self, authorId, reqType, info):
         self.author = authorId
         self.requestType = reqType
         self.requestInfo = info
@@ -27,7 +24,8 @@ class Request:
         tag = self.requestInfo.tags[Converter.reactToInt(reaction.emoji)]
         self.requestInfo.selectGameMode(tag)
         self.requestInfo.addMap()
-        MessageManager.sendMapConfirmation(self.requestInfo, self.author, reaction.message)
+        await reaction.message.delete()
+        await MessageManager.sendMapConfirmation(self.requestInfo, self.author, reaction.message)
         pass
 
     async def collectionReacted(self, reaction):
@@ -35,6 +33,7 @@ class Request:
         tag = mapInfo.tags[Converter.reactToInt(reaction.emoji)]
         self.requestInfo.setMapGameMode(tag)
         mapInfo = self.requestInfo.getMapInfo()
+        await reaction.message.delete()
         if mapInfo == None:
             await MessageManager.sendCollectionConfirmation(self.requestInfo, self.author, reaction.message)
             return True
