@@ -1,4 +1,3 @@
-
 def tagToGameMode(tag):
     switcher = {
         "Deathmatch": "DM",
@@ -14,6 +13,7 @@ def tagToGameMode(tag):
         "Prop Hunt": "PH"
     }
     return switcher.get(tag)
+
 
 def gameModeTotag(gameMode):
     switcher = {
@@ -31,6 +31,7 @@ def gameModeTotag(gameMode):
     }
     return switcher.get(gameMode)
 
+
 def intToReaction(inInt):
     switcher = {
         0: "0️⃣",
@@ -46,6 +47,7 @@ def intToReaction(inInt):
         10: "🔟"
     }
     return switcher.get(inInt)
+
 
 def reactToInt(inEmote):
     switcher = {
