@@ -1,7 +1,9 @@
 import discord
 import Commands
 import RequestList
+import MapsList
 import SessionInfo
+import RconManagement
 
 client = discord.Client()
 
@@ -22,6 +24,8 @@ async def on_message(message):
     if args[0] == "/addcollection":
         await Commands.addCollection(message)
         pass
+    if args[0] == "/shufflemaps":
+        MapsList.shuffle()
     return
 
 
@@ -32,4 +36,5 @@ async def on_reaction_add(reaction, user):
 
 if __name__ == "__main__":
     SessionInfo.init()
+    RconManagement.init()
     client.run(SessionInfo.token)
