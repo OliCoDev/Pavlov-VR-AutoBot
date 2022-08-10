@@ -37,7 +37,7 @@ class Collection:
         while len(self.requestedMaps) > 0:
             if len(self.requestedMaps[0].tags) > 1:
                 break
-            self.requestedMaps[0].selectGameMode(self.requestedMaps[0].tags)
+            self.requestedMaps[0].selectGameMode(self.requestedMaps[0].tags[0])
             self.selectedMaps.append(self.requestedMaps.pop(0))
         pass
 

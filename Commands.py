@@ -34,7 +34,7 @@ async def addMap(message):
         if len(newMap.tags) == 1:
             newMap.selectGameMode(newMap.tags[0])
             newMap.addMap()
-            MessageManager.sendMapConfirmation(newMap, message.author.id, message)
+            await MessageManager.sendMapConfirmation(newMap, message.author.id, message)
             return
         newRequest = Request(message.author.id, RequestTypes.MAP, newMap)
         newRequest.setMessage(await MessageManager.sendMapRequest(newMap, message.author.id, message))
