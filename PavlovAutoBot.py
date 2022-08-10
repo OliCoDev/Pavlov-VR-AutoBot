@@ -1,6 +1,7 @@
 import discord
 import Commands
 import RequestList
+import SessionInfo
 
 client = discord.Client()
 
@@ -29,4 +30,6 @@ async def on_reaction_add(reaction, user):
     await RequestList.reacted(reaction, user)
     return
 
-client.run(token)
+if __name__ == "__main__":
+    SessionInfo.init()
+    client.run(SessionInfo.token)
