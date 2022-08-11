@@ -14,29 +14,24 @@ class Request:
     def setMessage(self, message):
         self.messageId = message.id
 
-    async def requestReacted(self, reaction):
+    async def requestReacted(self, gameModeTag, interaction):
         if self.requestType == RequestTypes.MAP:
-            await self.mapReacted(reaction)
+            await self.mapReacted(gameModeTag, interaction)
             return True
-        return await self.collectionReacted(reaction)
+        return await self.collectionReacted(gameModeTag, interaction)
 
-    async def mapReacted(self, reaction):
-        tag = self.requestInfo.tags[Converter.reactToInt(reaction.emoji)]
-        self.requestInfo.selectGameMode(tag)
+    async def mapReacted(self, gameModeTag, interaction):
+        self.requestInfo.selectGameMode(gameModeTag)
         self.requestInfo.addMap()
-        await reaction.message.delete()
-        await MessageManager.sendMapConfirmation(self.requestInfo, self.author, reaction.message)
+        await MessageManager.sendMapConfirmation(self.requestInfo, self.author, interaction)
         pass
 
-    async def collectionReacted(self, reaction):
+    async def collectionReacted(self, gameModeTag, interaction):
+        self.requestInfo.setMapGameMode(gameModeTag)
         mapInfo = self.requestInfo.getMapInfo()
-        tag = mapInfo.tags[Converter.reactToInt(reaction.emoji)]
-        self.requestInfo.setMapGameMode(tag)
-        mapInfo = self.requestInfo.getMapInfo()
-        await reaction.message.delete()
         if mapInfo == None:
-            await MessageManager.sendCollectionConfirmation(self.requestInfo, self.author, reaction.message)
+            await MessageManager.sendCollectionConfirmation(self.requestInfo, self.author, interaction)
             return True
-        self.setMessage(await MessageManager.sendMapRequest(mapInfo, self.author, reaction.message))
+        await MessageManager.editMapRequest(mapInfo, self.author, interaction)
         return False
         pass
