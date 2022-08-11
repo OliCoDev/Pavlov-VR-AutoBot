@@ -12,17 +12,17 @@ The Pavlov VR AutoBot is an easy way for you and your friends to create sessions
 
 **Python 3.8 or higher is required**
 
-To setup the Bot, you'll first need to install [discord.py](https://discordpy.readthedocs.io/en/stable/#)
+To setup the Bot, you'll first need to install [Pycord](https://docs.pycord.dev/en/master/index.html)
 To install it, you can run the following commands:
 ```
 # Linux/macOS
-python3 -m pip install -U discord.py
+python3 -m pip install -U py-cord
 
 # Windows
-py -3 -m pip install -U discord.py
+py -3 -m pip install -U py-cord
 ```
 
-Once [discord.py](https://discordpy.readthedocs.io/en/stable/#) has been installed, you can now create your Discord bot at the [Discord Developer Portal](https://discord.com/developers/applications) and get it's token. Using that token, you'll need to replace the ```[Token Here]``` that's inside of [data.json](data.json) with the token you have recieved from the [Discord Developer Portal](https://discord.com/developers/applications)
+Once [Pycord](https://docs.pycord.dev/en/master/index.html) has been installed, you can now create your Discord bot at the [Discord Developer Portal](https://discord.com/developers/applications) and get it's token(Don't forget to turn on MESSAGE CONTENT INTENT under the Bot category). Using that token, you'll need to replace the ```[Token Here]``` that's inside of [data.json](data.json) with the token you have recieved from the [Discord Developer Portal](https://discord.com/developers/applications)
 
 Finally, in [data.json](data.json) you will need to replace the ```[Pavlov VR Server IP Here]``` with the IP of the Pavlov Dedicated Server you would like the bot to be connected to, replace the ```[Rcon Port Here]``` with the port of the Rcon port you have selected and replace the ```[Rcon Password Here]``` with the Rcon password that you have set for the server
 
@@ -52,8 +52,6 @@ This command will shuffle the order of the maps that are present inside of the w
 As you might have guessed, this is still not entirely finished and I've got more planned for this script. My current future plans are:
 
 -Add commands that pauses and resumes the automatic map switching
-
--Change the message interaction from reactions to a selection menu
 
 ### License
 
