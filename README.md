@@ -50,7 +50,9 @@ This command will shuffle the order of the maps that are present inside of the w
 ## Current future plans
 
 As you might have guessed, this is still not entirely finished and I've got more planned for this script. My current future plans are:
+
 -Add commands that pauses and resumes the automatic map switching
+
 -Change the message interaction from reactions to a selection menu
 
 ### License
