@@ -14,26 +14,24 @@ class Request:
     def setMessage(self, message):
         self.messageId = message.id
 
-    async def requestReacted(self, gameModeTag, message):
+    async def requestReacted(self, gameModeTag, interaction):
         if self.requestType == RequestTypes.MAP:
-            await self.mapReacted(gameModeTag, message)
+            await self.mapReacted(gameModeTag, interaction)
             return True
-        return await self.collectionReacted(gameModeTag, message)
+        return await self.collectionReacted(gameModeTag, interaction)
 
-    async def mapReacted(self, gameModeTag, message):
+    async def mapReacted(self, gameModeTag, interaction):
         self.requestInfo.selectGameMode(gameModeTag)
         self.requestInfo.addMap()
-        await message.delete()
-        await MessageManager.sendMapConfirmation(self.requestInfo, self.author, message)
+        await MessageManager.sendMapConfirmation(self.requestInfo, self.author, interaction)
         pass
 
-    async def collectionReacted(self, gameModeTag, message):
+    async def collectionReacted(self, gameModeTag, interaction):
         self.requestInfo.setMapGameMode(gameModeTag)
         mapInfo = self.requestInfo.getMapInfo()
-        await message.delete()
         if mapInfo == None:
-            await MessageManager.sendCollectionConfirmation(self.requestInfo, self.author, message)
+            await MessageManager.sendCollectionConfirmation(self.requestInfo, self.author, interaction)
             return True
-        self.setMessage(await MessageManager.sendMapRequest(mapInfo, self.author, message))
+        await MessageManager.editMapRequest(mapInfo, self.author, interaction)
         return False
         pass

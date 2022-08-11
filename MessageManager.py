@@ -8,23 +8,43 @@ from discord import File, SelectOption
 from discord.ui import Select, View
 
 
-async def sendMapConfirmation(mapInfo: Map, author, message):
+async def sendMapConfirmation(mapInfo: Map, author, interaction):
     messageContent = "<@" + str(author) + ">\n" + mapInfo.title + \
                      " has been added with the GameMode set as " + Converter.gameModeTotag(mapInfo.gamemode)
     img = ImageManager.getImage(mapInfo.image)
     if img:
-        await message.channel.send(messageContent, file=File(r".\\" + img))
+        await interaction.response.edit_message(content=messageContent, files=[File(r".\\" + img)], attachments=[], view=None)
         ImageManager.deleteImage(img)
     else:
-        await message.channel.send(messageContent)
+        await interaction.response.edit_message(content=messageContent, files=[], attachments=[], view=None)
 
 
-async def sendCollectionConfirmation(collectionInfo: Collection, author, message):
+async def sendCollectionConfirmation(collectionInfo: Collection, author, interaction):
     messageContent = "<@" + str(author) + ">\nSuccessfully added:"
     for i in collectionInfo.selectedMaps:
         messageContent += "\n" + i.title + " with the GameMode set to " + Converter.gameModeTotag(i.gamemode)
-    await message.channel.send(messageContent)
+    await interaction.response.edit_message(content=messageContent, files=[], attachments=[], view=None)
 
+async def editMapRequest(mapInfo: Map, author, interaction):
+    messageContent = "<@" + str(author) + ">\nPlease select what gamemode you would like to play on " + mapInfo.title
+    options = []
+    for i in mapInfo.tags:
+        options.append(SelectOption(label=i))
+    newSelect = Select(placeholder="Select a GameMode", options=options)
+    newView = View(newSelect)
+
+    async def selectionMenuInteracted(newInteraction):
+        # await newInteraction.response.defer()
+        await RequestList.reacted(newSelect.values[0], newInteraction)
+        pass
+
+    newSelect.callback = selectionMenuInteracted
+    img = ImageManager.getImage(mapInfo.image)
+    if img:
+        await interaction.response.edit_message(content=messageContent, files=[File(r".\\" + img)], attachments=[], view=newView)
+        ImageManager.deleteImage(img)
+    else:
+        await interaction.response.edit_message(content=messageContent, files=[], attachments=[], view=newView)
 
 async def sendMapRequest(mapInfo: Map, author, message):
     messageContent = "<@" + str(author) + ">\nPlease select what gamemode you would like to play on " + mapInfo.title
@@ -35,15 +55,15 @@ async def sendMapRequest(mapInfo: Map, author, message):
     newView = View(newSelect)
 
     async def selectionMenuInteracted(interaction):
-        await interaction.response.defer()
-        await RequestList.reacted(newSelect.values[0], interaction.message, interaction.user)
+        # await interaction.response.defer()
+        await RequestList.reacted(newSelect.values[0], interaction)
         pass
 
     newSelect.callback = selectionMenuInteracted
     newMessage = None
     img = ImageManager.getImage(mapInfo.image)
     if img:
-        newMessage = await message.channel.send(messageContent, file=File(r".\\" + img), view=newView)
+        newMessage = await message.channel.send(messageContent, files=[File(r".\\" + img)], view=newView)
         ImageManager.deleteImage(img)
     else:
         newMessage = await message.channel.send(messageContent, view=newView)

@@ -1,12 +1,12 @@
 requests = []
 
 
-async def reacted(gameModeTag, message, author):
+async def reacted(gameModeTag, interaction):
     global requests
 
     for i in range(0, len(requests)):
-        if (requests[i].author == author.id) and (requests[i].messageId == message.id):
-            result = await requests[i].requestReacted(gameModeTag, message)
+        if (requests[i].author == interaction.user.id) and (requests[i].messageId == interaction.message.id):
+            result = await requests[i].requestReacted(gameModeTag, interaction)
             if result:
                 requests.pop(i)
             return

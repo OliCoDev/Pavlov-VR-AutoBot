@@ -21,7 +21,6 @@ async def on_message(message):
     if len(message.content) == 0:
         return
     if args[0] == "/addmap":
-        print("Map command")
         await Commands.addMap(message)
         pass
     if args[0] == "/addcollection":
