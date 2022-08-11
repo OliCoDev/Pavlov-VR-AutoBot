@@ -1,8 +1,11 @@
 import ImageManager
 import Converter
+import MapsList
+import RequestList
 from Map import Map
 from Collection import Collection
-from discord import File
+from discord import File, SelectOption
+from discord.ui import Select, View
 
 
 async def sendMapConfirmation(mapInfo: Map, author, message):
@@ -25,15 +28,23 @@ async def sendCollectionConfirmation(collectionInfo: Collection, author, message
 
 async def sendMapRequest(mapInfo: Map, author, message):
     messageContent = "<@" + str(author) + ">\nPlease select what gamemode you would like to play on " + mapInfo.title
-    for i in range(len(mapInfo.tags)):
-        messageContent += "\n" + Converter.intToReaction(i) + ": " + mapInfo.tags[i]
+    options = []
+    for i in mapInfo.tags:
+        options.append(SelectOption(label=i))
+    newSelect = Select(placeholder="Select a GameMode", options=options)
+    newView = View(newSelect)
+
+    async def selectionMenuInteracted(interaction):
+        await interaction.response.defer()
+        await RequestList.reacted(newSelect.values[0], interaction.message, interaction.user)
+        pass
+
+    newSelect.callback = selectionMenuInteracted
     newMessage = None
     img = ImageManager.getImage(mapInfo.image)
     if img:
-        newMessage = await message.channel.send(messageContent, file=File(r".\\" + img))
+        newMessage = await message.channel.send(messageContent, file=File(r".\\" + img), view=newView)
         ImageManager.deleteImage(img)
     else:
-        newMessage = await message.channel.send(messageContent)
-    for i in range(len(mapInfo.tags)):
-        await newMessage.add_reaction(Converter.intToReaction(i))
+        newMessage = await message.channel.send(messageContent, view=newView)
     return newMessage

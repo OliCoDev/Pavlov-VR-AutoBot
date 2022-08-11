@@ -1,11 +1,13 @@
 import discord
 import Commands
-import RequestList
 import MapsList
 import SessionInfo
 import RconManagement
 
-client = discord.Client()
+intents = discord.Intents.default()
+intents.message_content = True
+
+client = discord.Client(intents=intents)
 
 
 @client.event
@@ -19,6 +21,7 @@ async def on_message(message):
     if len(message.content) == 0:
         return
     if args[0] == "/addmap":
+        print("Map command")
         await Commands.addMap(message)
         pass
     if args[0] == "/addcollection":
@@ -26,12 +29,6 @@ async def on_message(message):
         pass
     if args[0] == "/shufflemaps":
         MapsList.shuffle()
-    return
-
-
-@client.event
-async def on_reaction_add(reaction, user):
-    await RequestList.reacted(reaction, user)
     return
 
 if __name__ == "__main__":
