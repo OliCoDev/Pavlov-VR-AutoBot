@@ -38,6 +38,7 @@ py -3 PavlovAutoBot.py
 ## Usage
 
 Currently you can use the bot using the following commands:
+
 -```/addmap [Map Url Here]```
 You can request a map using the aformentioned command and replacing the ```[Map Url Here]``` with the URL of a Pavlov VR Map that you can find on it's [Steam Workshop](https://steamcommunity.com/app/555160/workshop/) page. After that, you may follow the instruction that the bot gives you
 
