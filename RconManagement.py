@@ -10,6 +10,8 @@ thread1 = None
 thread2 = None
 connectionSocket = None
 mapSwitched = False
+nextMap = False
+canContinue = True
 
 
 def switchMap():
@@ -25,7 +27,7 @@ def switchMap():
 
 def socketReception():
     global connectionSocket
-    lastMessage = None
+    global nextMap
     while True:
         continueReception = True
         message = ""
@@ -37,9 +39,10 @@ def socketReception():
         if len(message) > 20:
             try:
                 messageJson = json.loads(message)
-                if lastMessage != messageJson:
-                    print(messageJson)
-                    lastMessage = messageJson
+                if nextMap:
+                    nextMap = False
+                    switchMap()
+                    continue
                 if messageJson['Command'] == "ServerInfo":
                     if ((messageJson['ServerInfo']['MapLabel'] == 'datacenter') or (messageJson['ServerInfo']['MapLabel'] == 'sand')) and messageJson['ServerInfo']['GameMode'] == 'DM':
                         switchMap()

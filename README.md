@@ -38,20 +38,24 @@ py -3 PavlovAutoBot.py
 ## Usage
 
 Currently you can use the bot using the following commands:
+
 -```/addmap [Map Url Here]```
-You can request a map using the aformentioned command and replacing the ```[Map Url Here]``` with the URL of a Pavlov VR Map that you can find on it's [Steam Workshop](https://steamcommunity.com/app/555160/workshop/) page. After that, you may follow the instruction that the bot gives you
+You can request a map using the aforementioned command and replacing the ```[Map Url Here]``` with the URL of a Pavlov VR Map that you can find on it's [Steam Workshop](https://steamcommunity.com/app/555160/workshop/) page. After that, you may follow the instruction that the bot gives you
 
 -```/addcollection [Collection Url Here]```
-You can request a collection of maps using the aformentioned command and replacing the ```[Collection Url Here]``` with the URL of a Pavlov VR Collection that you can find on it's [Steam Workshop Collections](https://steamcommunity.com/workshop/browse/?appid=555160&browsesort=trend&section=collections) page. After that, you may follow the instruction that the bot gives you
+You can request a collection of maps using the aforementioned command and replacing the ```[Collection Url Here]``` with the URL of a Pavlov VR Collection that you can find on it's [Steam Workshop Collections](https://steamcommunity.com/workshop/browse/?appid=555160&browsesort=trend&section=collections) page. After that, you may follow the instruction that the bot gives you
 
 -```/shufflemaps```
-This command will shuffle the order of the maps that are present inside of the waiting list
+This command will shuffle the order of the maps that are present inside the waiting list
 
-## Current future plans
+-```/pausemap```
+This command will pause the bot's ability to switch maps, so you may add maps and shuffle them without the bot switching maps on the Pavlov VR Server
 
-As you might have guessed, this is still not entirely finished and I've got more planned for this script. My current future plans are:
+-```/playmap```
+This command will resume the bot's ability to switch maps
 
--Add commands that pauses and resumes the automatic map switching
+-```/nextmap```
+This command will make the bot skip the current active map to the next map in the list. If there's no other map in the list
 
 ### License
 
