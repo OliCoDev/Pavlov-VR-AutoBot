@@ -29,6 +29,7 @@ async def shuffleMaps(message):
     await message.delete()
     MapsList.shuffle()
     await MessageManager.sendTempMessage(message, "The maps have been shuffled")
+    await updateMapLists()
 
 
 async def addMap(message):
@@ -49,6 +50,7 @@ async def addMap(message):
             newMap.selectGameMode(newMap.tags[0])
             newMap.addMap()
             await MessageManager.sendMapSingleTagConfirmation(newMap, message.author.id, message)
+            await updateMapLists()
             return
         newRequest = Request(message.author.id, RequestTypes.MAP, newMap)
         newRequest.setMessage(await MessageManager.sendMapRequest(newMap, message.author.id, message))
@@ -94,6 +96,7 @@ async def nextMap(message):
     curMap = MapsList.maps[0]
     messageContent = "Switching over to " + curMap.title + " with the GameMode set to" + Converter.gameModeTotag(curMap.gamemode)
     await MessageManager.sendTempMapMessage(message, messageContent, curMap)
+    await updateMapLists()
 
 
 async def pauseMap(message):
@@ -144,5 +147,16 @@ async def deleteMap(message):
         await MessageManager.sendTempMessage(message, message.author.mention +
                                              "\nThe inputed number was greater than the length of the current map list")
         return
-    mapInfo = MapsList.pop(mapInt)
+    mapInfo = MapsList.maps.pop(mapInt)
+    messageContent = str(message.author.mention) + "\n" + mapInfo.title + \
+                     " with the GameMode set as " + Converter.gameModeTotag(mapInfo.gamemode) + \
+                     " has been deleted from the list"
+    await MessageManager.sendTempMapMessage(message, messageContent, mapInfo)
+    await updateMapLists()
 
+
+
+async def updateMapLists():
+    for i in RequestList.requests:
+        if i.requestType == RequestTypes.MAPSLIST:
+            await i.requestInfo.updateMessage()

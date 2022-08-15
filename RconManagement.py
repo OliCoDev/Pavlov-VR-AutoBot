@@ -1,8 +1,11 @@
 import SessionInfo
 import threading
 import hashlib
+import asyncio
 import socket
 import json
+import RequestList
+from pavlovEnums import RequestTypes
 import MapsList
 import time
 
@@ -13,6 +16,17 @@ mapSwitched = False
 nextMap = False
 canContinue = True
 
+async def updateMapLists():
+    for i in RequestList.requests:
+        if i.requestType == RequestTypes.MAPSLIST:
+            await i.requestInfo.updateMessage()
+
+def updateListsAsyncThread():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    loop.run_until_complete(updateMapLists())
+    loop.close()
 
 def switchMap():
     global connectionSocket
@@ -23,6 +37,8 @@ def switchMap():
         message = "SwitchMap UGC" + str(nextMap.id) + " " + nextMap.gamemode
         connectionSocket.sendall(message.encode('utf-8'))
         mapSwitched = True
+        tempThread = threading.Thread(target=updateListsAsync(), args=())
+        tempThread.start()
 
 
 def socketReception():
