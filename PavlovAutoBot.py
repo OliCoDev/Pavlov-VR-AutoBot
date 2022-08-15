@@ -1,6 +1,5 @@
 import discord
 import Commands
-import MapsList
 import SessionInfo
 import RconManagement
 
@@ -22,12 +21,22 @@ async def on_message(message):
         return
     if args[0] == "/addmap":
         await Commands.addMap(message)
-        pass
+        return
     if args[0] == "/addcollection":
         await Commands.addCollection(message)
-        pass
+        return
     if args[0] == "/shufflemaps":
-        MapsList.shuffle()
+        await Commands.shuffleMaps(message)
+        return
+    if args[0] == "/nextmap":
+        await Commands.nextMap(message)
+        return
+    if args[0] == "/pausemap":
+        await Commands.pauseMap(message)
+        return
+    if args[0] == "/playmap":
+        await Commands.playMap(message)
+        return
     return
 
 if __name__ == "__main__":
