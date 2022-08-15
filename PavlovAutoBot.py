@@ -40,6 +40,9 @@ async def on_message(message):
     if args[0] == "/maplist":
         await Commands.mapsList(message)
         return
+    if args[0] == "/deletemap":
+        await Commands.deleteMap(message)
+        return
     return
 
 if __name__ == "__main__":

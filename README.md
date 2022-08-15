@@ -60,6 +60,9 @@ This command will make the bot skip the current active map to the next map in th
 -```/maplist```
 This command will make the bot show the user a list of the active map list. The user can change "page" by clicking the buttons if the current list is long enough
 
+-```/deletemap [map number in list]```
+This command will make the bot delete a map from the current map list if the inputed number is greater to 0 and under or equal to current the map list's length
+
 ### License
 
 MIT

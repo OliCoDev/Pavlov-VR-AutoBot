@@ -29,17 +29,20 @@ async def shuffleMaps(message):
     await message.delete()
     MapsList.shuffle()
     await MessageManager.sendTempMessage(message, "The maps have been shuffled")
+    await updateMapLists()
 
 
 async def addMap(message):
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
-        await message.channel.send(message.author.mention + "\nPlease make a request with a steam workshop url")
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease make a request with a steam workshop url")
         return
     mapId = getUrlId(args[1])
     if mapId == None:
-        await message.channel.send(message.author.mention + "\nPlease request a valid steam workshop url")
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease request a valid steam workshop url")
         return
     try:
         newMap = Map(mapId)
@@ -47,6 +50,7 @@ async def addMap(message):
             newMap.selectGameMode(newMap.tags[0])
             newMap.addMap()
             await MessageManager.sendMapSingleTagConfirmation(newMap, message.author.id, message)
+            await updateMapLists()
             return
         newRequest = Request(message.author.id, RequestTypes.MAP, newMap)
         newRequest.setMessage(await MessageManager.sendMapRequest(newMap, message.author.id, message))
@@ -60,11 +64,13 @@ async def addCollection(message):
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
-        await message.channel.send(message.author.mention + "\nPlease make a request with a steam workshop url")
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease make a request with a steam workshop url")
         return
     collectionId = getUrlId(args[1])
     if collectionId == None:
-        await message.channel.send(message.author.mention + "\nPlease request a valid steam workshop url")
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease request a valid steam workshop url")
         return
     try:
         newCollection = Collection(collectionId)
@@ -90,6 +96,7 @@ async def nextMap(message):
     curMap = MapsList.maps[0]
     messageContent = "Switching over to " + curMap.title + " with the GameMode set to" + Converter.gameModeTotag(curMap.gamemode)
     await MessageManager.sendTempMapMessage(message, messageContent, curMap)
+    await updateMapLists()
 
 
 async def pauseMap(message):
@@ -122,3 +129,34 @@ async def mapsList(message):
             await requestInfo.requestInfo.message.delete()
             RequestList.requests.pop(i)
     RequestList.addRequest(newRequest)
+
+
+async def deleteMap(message):
+    args = message.content.split(" ")
+    await message.delete()
+    if len(args) <= 1:
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease make a request with the number of the map you want to delete")
+        return
+    if not args[1].isnumeric():
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease make a request with the number of the map you want to delete")
+        return
+    mapInt = int(args[1]) - 1
+    if mapInt >= len(MapsList.maps):
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nThe inputed number was greater than the length of the current map list")
+        return
+    mapInfo = MapsList.maps.pop(mapInt)
+    messageContent = str(message.author.mention) + "\n" + mapInfo.title + \
+                     " with the GameMode set as " + Converter.gameModeTotag(mapInfo.gamemode) + \
+                     " has been deleted from the list"
+    await MessageManager.sendTempMapMessage(message, messageContent, mapInfo)
+    await updateMapLists()
+
+
+
+async def updateMapLists():
+    for i in RequestList.requests:
+        if i.requestType == RequestTypes.MAPSLIST:
+            await i.requestInfo.updateMessage()

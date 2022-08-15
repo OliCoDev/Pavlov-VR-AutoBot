@@ -23,7 +23,7 @@ class MapsQueue:
             lastMapPos = len(MapsList.maps)
         for i in range(self.mapPos, lastMapPos):
             mapInfo = MapsList.maps[i]
-            newContent += "\n" + str(i) + ": " + mapInfo.title + " with the gamemode set as " + \
+            newContent += "\n" + str(i + 1) + ": " + mapInfo.title + " with the gamemode set as " + \
                           Converter.gameModeTotag(mapInfo.gamemode)
         newView = self.getView()
         return [newContent, newView]
