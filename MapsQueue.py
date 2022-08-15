@@ -15,15 +15,12 @@ class MapsQueue:
 
     def createList(self):
         global maxMapView
-        print("MapPos:", self.mapPos)
-        print("List Length:", len(MapsList.maps))
         while len(MapsList.maps) < self.mapPos:
             self.mapPos -= maxMapView
         newContent = "<@" + str(self.author) + ">\nMaps List:"
-        lastMapPos = len(MapsList.maps) + maxMapView
+        lastMapPos = self.mapPos + maxMapView
         if len(MapsList.maps) < lastMapPos:
             lastMapPos = len(MapsList.maps)
-        print("Last map pos:", lastMapPos)
         for i in range(self.mapPos, lastMapPos):
             mapInfo = MapsList.maps[i]
             newContent += "\n" + str(i) + ": " + mapInfo.title + " with the gamemode set as " + \
