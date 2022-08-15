@@ -35,7 +35,7 @@ async def on_message(message):
         await Commands.pauseMap(message)
         return
     if args[0] == "/playmap":
-        await Commands.pauseMap(message)
+        await Commands.playMap(message)
         return
     return
 

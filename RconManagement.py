@@ -28,6 +28,7 @@ def switchMap():
 def socketReception():
     global connectionSocket
     global nextMap
+    global canContinue
     while True:
         continueReception = True
         message = ""
@@ -37,6 +38,8 @@ def socketReception():
             if len(data) < 1024:
                 continueReception = False
         if len(message) > 20:
+            if not canContinue:
+                continue
             try:
                 messageJson = json.loads(message)
                 if nextMap:

@@ -27,8 +27,7 @@ def getUrlId(url):
 async def shuffleMaps(message):
     await message.delete()
     MapsList.shuffle()
-    await message.channel.send(content="The maps have been shuffled",
-                               delete_after=30)
+    await MessageManager.sendTempMessage(message, "The maps have been shuffled")
 
 
 async def addMap(message):
@@ -46,7 +45,7 @@ async def addMap(message):
         if len(newMap.tags) == 1:
             newMap.selectGameMode(newMap.tags[0])
             newMap.addMap()
-            await MessageManager.sendMapConfirmation(newMap, message.author.id, message)
+            await MessageManager.sendMapSingleTagConfirmation(newMap, message.author.id, message)
             return
         newRequest = Request(message.author.id, RequestTypes.MAP, newMap)
         newRequest.setMessage(await MessageManager.sendMapRequest(newMap, message.author.id, message))
@@ -89,34 +88,21 @@ async def nextMap(message):
         return
     RconManagement.nextMap = True
     curMap = MapsList.maps[0]
-    img = ImageManager.getImage(curMap)
-    if img:
-        await message.channel.send(content="Switching over to " + curMap.title + " with the GameMode set to" +
-                                   Converter.gameModeTotag(curMap.gamemode),
-                                   file=File(r".\\" + img),
-                                   delete_after=30)
-        ImageManager.deleteImage(img)
-    else:
-        await message.channel.send(content="Switching over to " + curMap.title + " with the GameMode set to" +
-                                   Converter.gameModeTotag(curMap.gamemode),
-                                   delete_after=30)
+    messageContent = "Switching over to " + curMap.title + " with the GameMode set to" + Converter.gameModeTotag(curMap.gamemode)
+    await MessageManager.sendTempMapMessage(message, messageContent, curMap)
 
 
 async def pauseMap(message):
     await message.delete()
     if not RconManagement.canContinue:
-        await message.channel.send(content="The bot is already paused",
-                                   delete_after=30)
+        await MessageManager.sendTempMessage(message, "The bot is already paused")
     RconManagement.canContinue = False
-    await message.channel.send(content="The bot has been paused",
-                               delete_after=30)
+    await MessageManager.sendTempMessage(message, "The bot has been paused")
 
 
 async def playMap(message):
     await message.delete()
     if RconManagement.canContinue:
-        await message.channel.send(content="The bot is already active",
-                                   delete_after=30)
+        await MessageManager.sendTempMessage(message, "The bot is already active")
     RconManagement.canContinue = False
-    await message.channel.send(content="The bot has been resumed",
-                               delete_after=30)
+    await MessageManager.sendTempMessage(message, "The bot has been resumed")
