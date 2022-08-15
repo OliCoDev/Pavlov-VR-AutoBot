@@ -9,6 +9,7 @@ import MessageManager
 import MapsList
 import RconManagement
 from Request import Request
+from MapsQueue import  MapsQueue
 
 
 def getUrlId(url):
@@ -95,6 +96,7 @@ async def pauseMap(message):
     await message.delete()
     if not RconManagement.canContinue:
         await MessageManager.sendTempMessage(message, "The bot is already paused")
+        return
     RconManagement.canContinue = False
     await MessageManager.sendTempMessage(message, "The bot has been paused")
 
@@ -103,5 +105,15 @@ async def playMap(message):
     await message.delete()
     if RconManagement.canContinue:
         await MessageManager.sendTempMessage(message, "The bot is already active")
+        return
     RconManagement.canContinue = False
     await MessageManager.sendTempMessage(message, "The bot has been resumed")
+
+
+async def mapsList(message):
+    await message.delete()
+    newMessage = await MessageManager.sendListMessage(message)
+    newMapsList = MapsQueue(newMessage, message.author.id)
+    await newMapsList.updateMessage()
+    newRequest = Request(message.author.id, RequestTypes.MAPSLIST, newMapsList)
+    RequestList.addRequest(newRequest)

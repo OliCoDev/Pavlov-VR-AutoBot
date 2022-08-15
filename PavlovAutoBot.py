@@ -37,9 +37,12 @@ async def on_message(message):
     if args[0] == "/playmap":
         await Commands.playMap(message)
         return
+    if args[0] == "/maplist":
+        await Commands.mapsList(message)
+        return
     return
 
 if __name__ == "__main__":
     SessionInfo.init()
-    RconManagement.init()
+    # RconManagement.init()
     client.run(SessionInfo.token)

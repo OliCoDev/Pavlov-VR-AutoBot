@@ -30,6 +30,7 @@ class Request:
         self.requestInfo.setMapGameMode(gameModeTag)
         mapInfo = self.requestInfo.getMapInfo()
         if mapInfo == None:
+            self.requestInfo.addList()
             await MessageManager.sendCollectionConfirmation(self.requestInfo, self.author, interaction)
             return True
         await MessageManager.editMapRequest(mapInfo, self.author, interaction)
