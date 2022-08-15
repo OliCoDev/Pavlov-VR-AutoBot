@@ -83,8 +83,7 @@ async def addCollection(message):
 async def nextMap(message):
     await message.delete()
     if len(MapsList.maps) == 0:
-        await message.channel.send(content="There are no maps currently in the list",
-                                   delete_after=30)
+        await MessageManager.sendTempMessage(message, "There are no maps currently in the list")
         return
     RconManagement.nextMap = True
     curMap = MapsList.maps[0]
