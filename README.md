@@ -57,6 +57,9 @@ This command will resume the bot's ability to switch maps
 -```/nextmap```
 This command will make the bot skip the current active map to the next map in the list. If there's no other map in the list
 
+-```/maplist```
+This command will make the bot show the user a list of the active map list. The user can change "page" by clicking the buttons if the current list is long enough
+
 ### License
 
 MIT

@@ -116,4 +116,9 @@ async def mapsList(message):
     newMapsList = MapsQueue(newMessage, message.author.id)
     await newMapsList.updateMessage()
     newRequest = Request(message.author.id, RequestTypes.MAPSLIST, newMapsList)
+    for i in range(0, len(RequestList.requests)):
+        requestInfo = RequestList.requests[i]
+        if (requestInfo.author == message.author.id) and (requestInfo.requestType == RequestTypes.MAPSLIST):
+            await requestInfo.requestInfo.message.delete()
+            RequestList.requests.pop(i)
     RequestList.addRequest(newRequest)
