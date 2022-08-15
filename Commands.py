@@ -35,11 +35,13 @@ async def addMap(message):
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
-        await message.channel.send(message.author.mention + "\nPlease make a request with a steam workshop url")
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease make a request with a steam workshop url")
         return
     mapId = getUrlId(args[1])
     if mapId == None:
-        await message.channel.send(message.author.mention + "\nPlease request a valid steam workshop url")
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease request a valid steam workshop url")
         return
     try:
         newMap = Map(mapId)
@@ -60,11 +62,13 @@ async def addCollection(message):
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
-        await message.channel.send(message.author.mention + "\nPlease make a request with a steam workshop url")
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease make a request with a steam workshop url")
         return
     collectionId = getUrlId(args[1])
     if collectionId == None:
-        await message.channel.send(message.author.mention + "\nPlease request a valid steam workshop url")
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease request a valid steam workshop url")
         return
     try:
         newCollection = Collection(collectionId)
@@ -122,3 +126,23 @@ async def mapsList(message):
             await requestInfo.requestInfo.message.delete()
             RequestList.requests.pop(i)
     RequestList.addRequest(newRequest)
+
+
+async def deleteMap(message):
+    args = message.content.split(" ")
+    await message.delete()
+    if len(args) <= 1:
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease make a request with the number of the map you want to delete")
+        return
+    if not args[1].isnumeric():
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nPlease make a request with the number of the map you want to delete")
+        return
+    mapInt = int(args[1]) - 1
+    if mapInt >= len(MapsList.maps):
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nThe inputed number was greater than the length of the current map list")
+        return
+    mapInfo = MapsList.pop(mapInt)
+

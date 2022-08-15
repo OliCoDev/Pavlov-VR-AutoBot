@@ -105,3 +105,17 @@ async def sendListMessage(message):
 
 async def updateList(message, values):
     await message.edit(content=values[0], view=values[1])
+
+
+async def sendDeletedMap(message, mapInfo):
+    messageContent = str(message.author.mention) + "\n" + mapInfo.title + \
+                     " with the GameMode set as " + Converter.gameModeTotag(mapInfo.gamemode) + \
+                     " has been deleted from the list"
+    img = ImageManager.getImage(mapInfo.image)
+    if img:
+        await message.channel.send(content=messageContent, files=[File(r".\\" + img)], attachments=[], view=None,
+                                   delete_after=30)
+        ImageManager.deleteImage(img)
+    else:
+        await message.channel.send(content=messageContent,
+                                   delete_after=30)
