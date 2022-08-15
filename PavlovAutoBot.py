@@ -44,5 +44,5 @@ async def on_message(message):
 
 if __name__ == "__main__":
     SessionInfo.init()
-    # RconManagement.init()
+    RconManagement.init()
     client.run(SessionInfo.token)
