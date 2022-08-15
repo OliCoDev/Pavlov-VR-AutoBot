@@ -17,7 +17,7 @@ class MapsQueue:
         global maxMapView
         print("MapPos:", self.mapPos)
         print("List Length:", len(MapsList.maps))
-        if len(MapsList.maps) < self.mapPos:
+        while len(MapsList.maps) < self.mapPos:
             self.mapPos -= maxMapView
         newContent = "<@" + str(self.author) + ">\nMaps List:"
         lastMapPos = len(MapsList.maps) + maxMapView
