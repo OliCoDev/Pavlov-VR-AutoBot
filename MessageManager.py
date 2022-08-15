@@ -97,3 +97,11 @@ async def sendTempMapMessage(message, content, mapInfo):
     else:
         await message.channel.send(content=content,
                                    delete_after=30)
+
+
+async def sendListMessage(message):
+    return await message.channel.send(content="Please Wait")
+
+
+async def updateList(message, values):
+    await message.edit(content=values[0], view=values[1])

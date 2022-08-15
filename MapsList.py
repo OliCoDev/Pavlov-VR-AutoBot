@@ -13,6 +13,7 @@ def getMap():
 def addMap(newMap):
     global maps
     maps.append(newMap)
+    print("New length:", len(maps))
 
 
 def shuffle():
