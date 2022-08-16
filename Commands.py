@@ -12,6 +12,24 @@ from Request import Request
 from MapsQueue import  MapsQueue
 
 
+async def commandSwitcher(message):
+    args = message.content.split(" ")
+    switcher = {
+        "/addmap": addMap,
+        "/addcollection": addCollection,
+        "/shuffemaps": shuffleMaps,
+        "/nextmap": nextMap,
+        "/pausemap": pauseMap,
+        "/playmap": playMap,
+        "/maplist": mapsList,
+        "/deletemap": deleteMap
+    }
+    func = switcher.get(args[0], None)
+    if func:
+        func(message)
+        return
+
+
 def getUrlId(url):
     splitUrl = url.split("?")
     if len(splitUrl) <= 1:
