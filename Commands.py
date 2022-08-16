@@ -1,4 +1,5 @@
 import Converter
+import SessionInfo
 from Map import Map
 from Collection import Collection
 from pavlovEnums import RequestTypes
@@ -9,6 +10,10 @@ import RconManagement
 from Request import Request
 from MapsQueue import  MapsQueue
 
+def isInChannel(message):
+    if SessionInfo.discordInfo["channelId"] == "None" or SessionInfo.discordInfo["channelId"] == message.channel.id:
+        return True
+    return False
 
 def isAdmin(message):
     if message.author.id == message.guild.owner_id:
@@ -53,6 +58,8 @@ def getUrlId(url):
 
 
 async def shuffleMaps(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     MapsList.shuffle()
     await MessageManager.sendTempMessage(message, "The maps have been shuffled")
@@ -60,6 +67,8 @@ async def shuffleMaps(message):
 
 
 async def addMap(message):
+    if not isInChannel(message):
+        return
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
@@ -88,6 +97,8 @@ async def addMap(message):
 
 
 async def addCollection(message):
+    if not isInChannel(message):
+        return
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
@@ -115,6 +126,8 @@ async def addCollection(message):
 
 
 async def nextMap(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     if len(MapsList.maps) == 0:
         await MessageManager.sendTempMessage(message, "There are no maps currently in the list")
@@ -127,6 +140,8 @@ async def nextMap(message):
 
 
 async def pauseMap(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     if not RconManagement.canContinue:
         await MessageManager.sendTempMessage(message, "The bot is already paused")
@@ -136,6 +151,8 @@ async def pauseMap(message):
 
 
 async def playMap(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     if RconManagement.canContinue:
         await MessageManager.sendTempMessage(message, "The bot is already active")
@@ -145,6 +162,8 @@ async def playMap(message):
 
 
 async def mapsList(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     newMessage = await MessageManager.sendListMessage(message)
     newMapsList = MapsQueue(newMessage, message.author.id)
@@ -159,6 +178,8 @@ async def mapsList(message):
 
 
 async def deleteMap(message):
+    if not isInChannel(message):
+        return
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
