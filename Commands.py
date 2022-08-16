@@ -1,9 +1,7 @@
 import Converter
 from Map import Map
-from discord import File
 from Collection import Collection
 from pavlovEnums import RequestTypes
-import ImageManager
 import RequestList
 import MessageManager
 import MapsList
@@ -12,21 +10,32 @@ from Request import Request
 from MapsQueue import  MapsQueue
 
 
+def isAdmin(message):
+    if message.author.id == message.guild.owner_id:
+        return True
+    roles = message.author.roles
+    for role in roles:
+        if role.permissions.administrator:
+            return True
+    return False
+
+
 async def commandSwitcher(message):
     args = message.content.split(" ")
     switcher = {
         "/addmap": addMap,
         "/addcollection": addCollection,
-        "/shuffemaps": shuffleMaps,
+        "/shufflemaps": shuffleMaps,
         "/nextmap": nextMap,
         "/pausemap": pauseMap,
         "/playmap": playMap,
         "/maplist": mapsList,
-        "/deletemap": deleteMap
+        "/deletemap": deleteMap,
+        "/setpavlovchannel": setPavlovChannel
     }
     func = switcher.get(args[0], None)
     if func:
-        func(message)
+        await func(message)
         return
 
 
@@ -173,8 +182,16 @@ async def deleteMap(message):
     await updateMapLists()
 
 
-
 async def updateMapLists():
     for i in RequestList.requests:
         if i.requestType == RequestTypes.MAPSLIST:
             await i.requestInfo.updateMessage()
+
+
+async def setPavlovChannel(message):
+    await message.delete()
+    if not isAdmin(message):
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nYou do not have permission to use this command")
+    await MessageManager.sendChannelRequest(message)
+

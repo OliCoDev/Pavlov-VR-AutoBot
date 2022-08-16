@@ -5,3 +5,4 @@ class RequestTypes(Enum):
     MAP = 0
     COLLECTION = 1
     MAPSLIST = 2
+    CHANNEL = 3
