@@ -85,7 +85,7 @@ async def addMap(message):
         if len(newMap.tags) == 1:
             newMap.selectGameMode(newMap.tags[0])
             newMap.addMap()
-            await MessageManager.sendMapSingleTagConfirmation(newMap, message.author.id, message)
+            await MessageManager.sendMapSingleTagConfirmation(newMap, message)
             await updateMapLists()
             return
         newRequest = Request(message.author.id, RequestTypes.MAP, newMap)
@@ -157,7 +157,7 @@ async def playMap(message):
     if RconManagement.canContinue:
         await MessageManager.sendTempMessage(message, "The bot is already active")
         return
-    RconManagement.canContinue = False
+    RconManagement.canContinue = True
     await MessageManager.sendTempMessage(message, "The bot has been resumed")
 
 

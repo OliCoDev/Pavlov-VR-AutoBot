@@ -8,7 +8,7 @@ from discord import File, SelectOption, ChannelType
 from discord.ui import Select, View
 
 
-async def sendMapConfirmation(mapInfo: Map, author, interaction):
+async def sendMapConfirmation(mapInfo: Map, author: int, interaction):
     messageContent = "<@" + str(author) + ">\n" + mapInfo.title + \
                      " has been added with the GameMode set as " + Converter.gameModeTotag(mapInfo.gamemode)
     img = ImageManager.getImage(mapInfo.image)
@@ -19,8 +19,8 @@ async def sendMapConfirmation(mapInfo: Map, author, interaction):
         await interaction.response.edit_message(content=messageContent, files=[], attachments=[], view=None)
 
 
-async def sendMapSingleTagConfirmation(mapInfo: Map, author, message):
-    messageContent = "<@" + str(author) + ">\n" + mapInfo.title + \
+async def sendMapSingleTagConfirmation(mapInfo: Map, message):
+    messageContent = message.author.mention + "\n" + mapInfo.title + \
                      " has been added with the GameMode set as " + Converter.gameModeTotag(mapInfo.gamemode)
     img = ImageManager.getImage(mapInfo.image)
     if img:

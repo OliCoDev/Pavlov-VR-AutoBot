@@ -16,6 +16,12 @@ mapSwitched = False
 nextMap = False
 canContinue = True
 
+
+def getPlayerCount(inString):
+    countString = inString.split("/")[0]
+    return int(countString)
+
+
 async def updateMapLists():
     for i in RequestList.requests:
         if i.requestType == RequestTypes.MAPSLIST:
@@ -37,7 +43,7 @@ def switchMap():
         message = "SwitchMap UGC" + str(nextMap.id) + " " + nextMap.gamemode
         connectionSocket.sendall(message.encode('utf-8'))
         mapSwitched = True
-        tempThread = threading.Thread(target=updateListsAsync(), args=())
+        tempThread = threading.Thread(target=updateListsAsyncThread, args=())
         tempThread.start()
 
 
@@ -62,8 +68,11 @@ def socketReception():
                     nextMap = False
                     switchMap()
                     continue
-                if messageJson['Command'] == "ServerInfo":
-                    if ((messageJson['ServerInfo']['MapLabel'] == 'datacenter') or (messageJson['ServerInfo']['MapLabel'] == 'sand')) and messageJson['ServerInfo']['GameMode'] == 'DM':
+                if (messageJson['Command'] == "ServerInfo") and messageJson['Successful']:
+                    if ((messageJson['ServerInfo']['MapLabel'] == 'datacenter') or
+                            (messageJson['ServerInfo']['MapLabel'] == 'sand')) and \
+                            messageJson['ServerInfo']['GameMode'] == 'DM' and \
+                            (getPlayerCount(messageJson['ServerInfo']['PlayerCount']) > 0):
                         switchMap()
             finally:
                 pass

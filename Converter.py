@@ -8,7 +8,7 @@ def tagToGameMode(tag):
         "TTT": "TTT",
         "Zombie Coop": "ZWV",
         "Custom": "CUSTOM",
-        "PUSH": "PUSH",
+        "Push": "PUSH",
         "Hide": "HIDE",
         "Prop Hunt": "PH"
     }
@@ -25,7 +25,7 @@ def gameModeTotag(gameMode):
         "TTT": "TTT",
         "ZWV": "Zombie Coop",
         "CUSTOM": "Custom",
-        "PUSH": "PUSH",
+        "PUSH": "Push",
         "HIDE": "Hide",
         "PH": "Prop Hunt"
     }
