@@ -1,5 +1,5 @@
 import discord
-import Commands
+from Commands import commandSwitcher
 import SessionInfo
 import RconManagement
 
@@ -16,33 +16,9 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    args = message.content.split(" ")
     if len(message.content) == 0:
         return
-    if args[0] == "/addmap":
-        await Commands.addMap(message)
-        return
-    if args[0] == "/addcollection":
-        await Commands.addCollection(message)
-        return
-    if args[0] == "/shufflemaps":
-        await Commands.shuffleMaps(message)
-        return
-    if args[0] == "/nextmap":
-        await Commands.nextMap(message)
-        return
-    if args[0] == "/pausemap":
-        await Commands.pauseMap(message)
-        return
-    if args[0] == "/playmap":
-        await Commands.playMap(message)
-        return
-    if args[0] == "/maplist":
-        await Commands.mapsList(message)
-        return
-    if args[0] == "/deletemap":
-        await Commands.deleteMap(message)
-        return
+    await commandSwitcher(message)
     return
 
 if __name__ == "__main__":

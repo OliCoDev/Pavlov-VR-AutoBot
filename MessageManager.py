@@ -1,14 +1,14 @@
 import ImageManager
 import Converter
-import MapsList
 import RequestList
+import SessionInfo
 from Map import Map
 from Collection import Collection
-from discord import File, SelectOption
+from discord import File, SelectOption, ChannelType
 from discord.ui import Select, View
 
 
-async def sendMapConfirmation(mapInfo: Map, author, interaction):
+async def sendMapConfirmation(mapInfo: Map, author: int, interaction):
     messageContent = "<@" + str(author) + ">\n" + mapInfo.title + \
                      " has been added with the GameMode set as " + Converter.gameModeTotag(mapInfo.gamemode)
     img = ImageManager.getImage(mapInfo.image)
@@ -19,8 +19,8 @@ async def sendMapConfirmation(mapInfo: Map, author, interaction):
         await interaction.response.edit_message(content=messageContent, files=[], attachments=[], view=None)
 
 
-async def sendMapSingleTagConfirmation(mapInfo: Map, author, message):
-    messageContent = "<@" + str(author) + ">\n" + mapInfo.title + \
+async def sendMapSingleTagConfirmation(mapInfo: Map, message):
+    messageContent = message.author.mention + "\n" + mapInfo.title + \
                      " has been added with the GameMode set as " + Converter.gameModeTotag(mapInfo.gamemode)
     img = ImageManager.getImage(mapInfo.image)
     if img:
@@ -105,3 +105,31 @@ async def sendListMessage(message):
 
 async def updateList(message, values):
     await message.edit(content=values[0], view=values[1])
+
+
+async def sendChannelRequest(message):
+    channels = [SelectOption(label="None")]
+    for i in message.guild.channels:
+        if i.type == ChannelType.text:
+            channels.append(SelectOption(label=i.name))
+    newSelect = Select(placeholder="Select a Text Channel", options=channels)
+
+    async def channelSelected(interaction):
+        if interaction.user.id != message.author.id:
+            return
+        selectedValue = newSelect.values[0]
+        if selectedValue == "None":
+            SessionInfo.setChannel("None")
+            await interaction.response.edit_message(content="Commands can now be requested anywhere",
+                                                    view=None)
+        else:
+            for i in message.guild.channels:
+                if i.type == ChannelType.text:
+                    if i.name == selectedValue:
+                        SessionInfo.setChannel(i.id)
+            await interaction.response.edit_message(content="The commands channel has been set to " + selectedValue,
+                                                    view=None)
+    newSelect.callback = channelSelected
+    newView = View(newSelect)
+    await message.channel.send(content="Please select which channel you want the commands to be in", view=newView)
+

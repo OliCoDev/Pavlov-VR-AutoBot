@@ -1,15 +1,47 @@
 import Converter
+import SessionInfo
 from Map import Map
-from discord import File
 from Collection import Collection
 from pavlovEnums import RequestTypes
-import ImageManager
 import RequestList
 import MessageManager
 import MapsList
 import RconManagement
 from Request import Request
 from MapsQueue import  MapsQueue
+
+def isInChannel(message):
+    if SessionInfo.discordInfo["channelId"] == "None" or SessionInfo.discordInfo["channelId"] == message.channel.id:
+        return True
+    return False
+
+def isAdmin(message):
+    if message.author.id == message.guild.owner_id:
+        return True
+    roles = message.author.roles
+    for role in roles:
+        if role.permissions.administrator:
+            return True
+    return False
+
+
+async def commandSwitcher(message):
+    args = message.content.split(" ")
+    switcher = {
+        "/addmap": addMap,
+        "/addcollection": addCollection,
+        "/shufflemaps": shuffleMaps,
+        "/nextmap": nextMap,
+        "/pausemap": pauseMap,
+        "/playmap": playMap,
+        "/maplist": mapsList,
+        "/deletemap": deleteMap,
+        "/setpavlovchannel": setPavlovChannel
+    }
+    func = switcher.get(args[0], None)
+    if func:
+        await func(message)
+        return
 
 
 def getUrlId(url):
@@ -26,6 +58,8 @@ def getUrlId(url):
 
 
 async def shuffleMaps(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     MapsList.shuffle()
     await MessageManager.sendTempMessage(message, "The maps have been shuffled")
@@ -33,6 +67,8 @@ async def shuffleMaps(message):
 
 
 async def addMap(message):
+    if not isInChannel(message):
+        return
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
@@ -49,7 +85,7 @@ async def addMap(message):
         if len(newMap.tags) == 1:
             newMap.selectGameMode(newMap.tags[0])
             newMap.addMap()
-            await MessageManager.sendMapSingleTagConfirmation(newMap, message.author.id, message)
+            await MessageManager.sendMapSingleTagConfirmation(newMap, message)
             await updateMapLists()
             return
         newRequest = Request(message.author.id, RequestTypes.MAP, newMap)
@@ -61,6 +97,8 @@ async def addMap(message):
 
 
 async def addCollection(message):
+    if not isInChannel(message):
+        return
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
@@ -88,6 +126,8 @@ async def addCollection(message):
 
 
 async def nextMap(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     if len(MapsList.maps) == 0:
         await MessageManager.sendTempMessage(message, "There are no maps currently in the list")
@@ -100,6 +140,8 @@ async def nextMap(message):
 
 
 async def pauseMap(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     if not RconManagement.canContinue:
         await MessageManager.sendTempMessage(message, "The bot is already paused")
@@ -109,15 +151,19 @@ async def pauseMap(message):
 
 
 async def playMap(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     if RconManagement.canContinue:
         await MessageManager.sendTempMessage(message, "The bot is already active")
         return
-    RconManagement.canContinue = False
+    RconManagement.canContinue = True
     await MessageManager.sendTempMessage(message, "The bot has been resumed")
 
 
 async def mapsList(message):
+    if not isInChannel(message):
+        return
     await message.delete()
     newMessage = await MessageManager.sendListMessage(message)
     newMapsList = MapsQueue(newMessage, message.author.id)
@@ -132,6 +178,8 @@ async def mapsList(message):
 
 
 async def deleteMap(message):
+    if not isInChannel(message):
+        return
     args = message.content.split(" ")
     await message.delete()
     if len(args) <= 1:
@@ -155,8 +203,16 @@ async def deleteMap(message):
     await updateMapLists()
 
 
-
 async def updateMapLists():
     for i in RequestList.requests:
         if i.requestType == RequestTypes.MAPSLIST:
             await i.requestInfo.updateMessage()
+
+
+async def setPavlovChannel(message):
+    await message.delete()
+    if not isAdmin(message):
+        await MessageManager.sendTempMessage(message, message.author.mention +
+                                             "\nYou do not have permission to use this command")
+    await MessageManager.sendChannelRequest(message)
+
