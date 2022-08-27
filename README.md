@@ -63,6 +63,9 @@ This command will make the bot show the user a list of the active map list. The 
 -```/deletemap [map number in list]```
 This command will make the bot delete a map from the current map list if the inputed number is greater to 0 and under or equal to current the map list's length
 
+-```/setpavlovchannel```
+**[ADMIN COMMAND ONLY]** This command will let a user with administrative power on the Discord server set where the non Admin only commands can be used
+
 ### License
 
 MIT
